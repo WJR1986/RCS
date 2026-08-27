@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Richardson's Cleaning Services provides professional exterior cleaning across Northumberland, including windows, gutters, fascias, soffits, patios, driveways and roofs.">
   <meta name="theme-color" content="#061022">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; script-src 'self' https://cdn.jsdelivr.net; font-src 'self' https://cdn.jsdelivr.net data:; img-src 'self' data:; form-action https://formsubmit.co; object-src 'none'; base-uri 'self'; upgrade-insecure-requests">
   <title>Richardson's Cleaning Services | Exterior Cleaning Northumberland</title>
 
   <link rel="icon" type="image/png" href="assets/favicon.png">
@@ -69,7 +71,7 @@
             <h1>Professional exterior cleaning that brings your property <span>back to its best.</span></h1>
             <p class="hero-lead">Reliable domestic and commercial exterior cleaning, from windows and gutters to patios, driveways and roofs.</p>
 
-            <div class="d-flex flex-column flex-sm-row gap-3 mt-4">
+            <div class="hero-actions d-flex flex-column flex-sm-row gap-3 mt-4">
               <a class="btn btn-primary btn-lg" href="#quote"><i class="bi bi-clipboard-check me-2"></i>Get a free quote</a>
               <a class="btn btn-outline-light btn-lg" href="tel:+447873319032"><i class="bi bi-telephone-fill me-2"></i>07873 319032</a>
             </div>
@@ -216,7 +218,7 @@
           <div class="col-lg-5">
             <span class="eyebrow">Free, no-obligation quote</span>
             <h2 class="text-white">Tell us what you need cleaned.</h2>
-            <p class="quote-copy">Use the quick form and your email app will open with the details ready to send. You can also call or email directly.</p>
+            <p class="quote-copy">Send a quick quote request and RCS will get back to you. You can also call or email directly.</p>
 
             <div class="contact-links">
               <a href="tel:+447873319032"><i class="bi bi-telephone-fill"></i><span><small>Call</small>07873 319032</span></a>
@@ -226,21 +228,57 @@
           </div>
 
           <div class="col-lg-7">
-            <form id="quoteForm" class="quote-form" novalidate>
+            <div id="formStatus" class="form-status" role="status" aria-live="polite" hidden>
+              <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+              <div>
+                <strong>Quote request sent.</strong>
+                <span>Thanks — RCS will get back to you as soon as possible.</span>
+              </div>
+            </div>
+
+            <!-- FormSubmit keeps this static site backend-free. After the first
+                 verification email, its private random endpoint can replace the
+                 email address in action below without changing anything else. -->
+            <form id="quoteForm" class="quote-form" action="https://formsubmit.co/rcs.exteriorcleaning@gmail.com" method="POST" accept-charset="UTF-8" novalidate>
+              <input type="hidden" name="_subject" value="New RCS website quote request">
+              <input type="hidden" name="_template" value="table">
+              <input type="hidden" name="_captcha" value="true">
+              <input type="hidden" name="_next" id="formNext" value="">
+              <input type="hidden" name="_url" id="formUrl" value="">
+
+              <div class="form-trap" aria-hidden="true">
+                <label for="website">Leave this field empty</label>
+                <input type="text" name="_honey" id="website" tabindex="-1" autocomplete="off">
+              </div>
+
               <div class="row g-3">
                 <div class="col-md-6">
                   <label for="name" class="form-label">Your name</label>
-                  <input type="text" class="form-control" id="name" autocomplete="name" required>
+                  <input type="text" class="form-control" id="name" name="name" autocomplete="name" maxlength="80" required>
                   <div class="invalid-feedback">Please enter your name.</div>
                 </div>
+
+                <div class="col-md-6">
+                  <label for="phone" class="form-label">Phone number</label>
+                  <input type="tel" class="form-control" id="phone" name="phone" autocomplete="tel" inputmode="tel" maxlength="30" required>
+                  <div class="invalid-feedback">Please enter a phone number.</div>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="email" class="form-label">Email <span class="text-muted">(optional)</span></label>
+                  <input type="email" class="form-control" id="email" name="email" autocomplete="email" maxlength="120">
+                  <div class="invalid-feedback">Please enter a valid email address.</div>
+                </div>
+
                 <div class="col-md-6">
                   <label for="area" class="form-label">Area / postcode</label>
-                  <input type="text" class="form-control" id="area" autocomplete="postal-code" required>
+                  <input type="text" class="form-control" id="area" name="area" autocomplete="postal-code" maxlength="80" required>
                   <div class="invalid-feedback">Please enter your area or postcode.</div>
                 </div>
+
                 <div class="col-12">
                   <label for="service" class="form-label">Service required</label>
-                  <select class="form-select" id="service" required>
+                  <select class="form-select" id="service" name="service" required>
                     <option value="" selected disabled>Choose a service</option>
                     <option>Window & conservatory cleaning</option>
                     <option>Gutter cleaning</option>
@@ -252,13 +290,19 @@
                   </select>
                   <div class="invalid-feedback">Please choose a service.</div>
                 </div>
+
                 <div class="col-12">
                   <label for="details" class="form-label">A few details <span class="text-muted">(optional)</span></label>
-                  <textarea class="form-control" id="details" rows="4" placeholder="For example: property size, access, how many windows, or anything else useful."></textarea>
+                  <textarea class="form-control" id="details" name="details" rows="4" maxlength="1200" placeholder="For example: property size, access, how many windows, or anything else useful."></textarea>
+                  <div class="form-text text-end"><span id="detailsCount">0</span>/1200</div>
                 </div>
+
                 <div class="col-12">
-                  <button class="btn btn-primary btn-lg w-100" type="submit"><i class="bi bi-envelope-paper me-2"></i>Prepare my quote request</button>
-                  <p class="form-note mb-0 mt-3">No information is stored on this website. The form simply prepares an email on your device.</p>
+                  <button class="btn btn-primary btn-lg w-100" type="submit" id="quoteSubmit">
+                    <span class="submit-label"><i class="bi bi-send-fill me-2"></i>Send quote request</span>
+                    <span class="submit-loading" hidden><span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Sending…</span>
+                  </button>
+                  <p class="form-note mb-0 mt-3">Your details are used only to respond to this enquiry. The form is delivered through FormSubmit, a third-party form service. Please do not include sensitive information.</p>
                 </div>
               </div>
             </form>
